@@ -23,7 +23,7 @@ class OrderCreateView(CreateView):
     fields = ["company", "assays"]
     
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        form.instance.user_id = self.request.user.id
         return super().form_valid(form)
 
 class OrderUpdateView(UpdateView):
