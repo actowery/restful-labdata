@@ -26,9 +26,9 @@ class EmployeeAdmin(UserAdmin):
     list_display = [
         'email',
         'username',
-        'is_admin',
+        'is_supervisor',
     ]
-    fieldsets = UserAdmin.fieldsets + ((None, {'fields': ('is_admin',)}),)
-    add_fieldsets = UserAdmin.add_fieldsets + ((None, {'fields': ('is_admin',)}),)
+    fieldsets = UserAdmin.fieldsets + ((None, {'fields': ('is_supervisor',)}),)
+    add_fieldsets = UserAdmin.add_fieldsets + ((None, {'fields': ('is_supervisor',)}),)
  
 admin.site.register(Employee, EmployeeAdmin)

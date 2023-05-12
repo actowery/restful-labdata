@@ -5,9 +5,13 @@ from django.urls import reverse_lazy
 
 from .models import Order
 
-class OrderListView(ListView):
+class HomeView(ListView):
     model = Order
     template_name = "home.html"
+
+class OrderListView(ListView):
+    model = Order
+    template_name = "order_list.html"
 
 class OrderDetailView(DetailView):
     model = Order
