@@ -7,8 +7,9 @@ class Order(models.Model):
         "auth.User",
         on_delete=models.RESTRICT,
     )
-    body = models.TextField()
-
+    company = models.TextField()
+    assays = models.JSONField
+    
     def __str__(self):
         return self.title
 
