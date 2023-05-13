@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Order, Assay
+from .models.models import Order
+from .models.assays import Assay
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
