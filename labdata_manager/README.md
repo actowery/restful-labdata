@@ -4,4 +4,4 @@ The purpose of this project is to develop a web application that enables a labor
 
 There will be restful apis (mostly customer facing interfaces, eg order and account creation), and graphql (for employee facing interfaces, mostly for data processing)
 
-Because the models have strong relationships with each other, we will use sql. Initially mysql and will upgrade to postgres in the future
+Because the models have strong relationships with each other, we will use sql. Initially sqlite for local development and will upgrade to postgres in the future
