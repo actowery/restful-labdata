@@ -37,10 +37,20 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
     form_class = OrderForm
 
     def form_valid(self, form):
-        form.instance.user_id = self.request.user.id
+        order = form.save(commit=False)
+        order.user = self.request.user
+        order.order = self.object
+        order.save()
         return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        # This method is called when the form validation fails.
+        # You can add your debugging statements here to print the form errors.
+        print(form.errors)
+        print(form.cleaned_data)
+        return super().form_invalid(form)
 
-class OrderUpdateView(UpdateView):
+class OrderUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Order
     template_name = "order_edit.html"
     fields = (
@@ -52,7 +62,7 @@ class OrderUpdateView(UpdateView):
         obj = self.get_object()
         return obj.author == self.request.user
 
-class OrderDeleteView(DeleteView):
+class OrderDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Order
     template_name = "order_delete.html"
     success_url = reverse_lazy("order_list")

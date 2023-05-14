@@ -3,8 +3,9 @@
 
 {% block content %}
 <div class="order-entry">
-    <h2>Order {{ object }} by {{ opject.company }}</h2>
-    <p>by {{ object.author }} | {{ object.date }}</p>
+    <h2>Order {{ object }} - {{ object.company }}</h2>
+    <p>by {{ object.user }}</p>
+    <h4>Assays:</h4>
     <p>{{ object.assays }}</p>
 </div>
 
@@ -25,16 +26,3 @@
     <a href="{% url 'order_delete' order.pk %}">Delete</a></p>
 <p>Back to <a href="{% url 'order_list' %}">All Orders</a>.</p> 
 {% endblock content %}
-
-
-<!-- 
-
-user = models.ForeignKey(
-    CustomUser,
-    on_delete=models.RESTRICT,
-)
-
-created_at = models.DateTimeField(auto_now_add=True)
-updated_at = models.DateTimeField(auto_now=True)
-company = models.TextField()
-assays = models.JSONField(default=default_order()) -->

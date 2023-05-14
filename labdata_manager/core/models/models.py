@@ -3,8 +3,7 @@ from django.db import models
 from django.urls import reverse
 
 from accounts.models import CustomUser
-
-
+from common.constants import AVAILABLE_ASSAYS
 
 class Order(models.Model):
 
@@ -15,11 +14,8 @@ class Order(models.Model):
         return reverse("order_detail", kwargs={"pk": self.pk})
     
     def default_order():
-        default_json = {"test1": {"num_tests": 0,"lot_numbers": []},\
-            "test2": {"num_tests": 0,"lot_numbers": []},\
-            "test3": {"num_tests": 0,"lot_numbers": []}}
-        return default_json
-    
+        return ()
+        
     user = models.ForeignKey(
         CustomUser,
         on_delete=models.RESTRICT,
@@ -28,10 +24,12 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     company = models.TextField()
-    assays = models.ManyToManyField(
+    assays = models.CharField(
         'Assay',
-        related_name='orders'
+        choices=AVAILABLE_ASSAYS,
+        max_length=10
     )
+    quantity = models.PositiveIntegerField()
 
 
 class Comment(models.Model):
