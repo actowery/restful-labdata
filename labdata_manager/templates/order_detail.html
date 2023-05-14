@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="order-entry">
+    <h2>Order {{ object }} - {{ object.company }}</h2>
+    <p>by {{ object.user }}</p>
+    <h4>Assays:</h4>
+    <p>{{ object.assays }}</p>
+</div>
+
+<hr>
+<h4>Comments</h4>
+    {% for comment in order.comment_set.all %}
+        <p>{{ comment.author }} &middot; {{ comment }}</p> 
+    {% endfor %}
+<hr>
+
+<h4>Add a comment</h4>
+    <form action="" method="post">{% csrf_token %}
+        {{ form|crispy }}
+        <button class="btn btn-success ml-2" type="submit">Save</button>
+    </form>
+
+<p><a href="{% url 'order_edit' order.pk %}">Edit</a> |
+    <a href="{% url 'order_delete' order.pk %}">Delete</a></p>
+<p>Back to <a href="{% url 'order_list' %}">All Orders</a>.</p> 
+{% endblock content %}

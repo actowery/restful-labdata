@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Order{% endblock title %}
+{% block content %}
+{% if user.is_authenticated %}
+  Hi {{ user.username }}
+  your list of orders:
+  <ul>
+    {% for order in user.order_set.all %}
+      <li><a href={{order.get_absolute_url}}>Order #{{ order }}</a></li>
+    {% empty %}
+      <li>You have no orders yet.</li>
+    {% endfor %}
+  </ul>
+  <p><a href="{% url 'logout' %}">Log Out</a></p>
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">Log In</a> |
+  <a href="{% url 'signup' %}">Sign Up</a>
+{% endif %}
+{% endblock content %}

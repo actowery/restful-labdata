@@ -8,7 +8,6 @@ from .models import CustomUser, Employee
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
-    model = CustomUser
     list_display = [
         'email',
         'username',
@@ -22,13 +21,12 @@ admin.site.register(CustomUser, CustomUserAdmin)
 class EmployeeAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
-    model = CustomUser
     list_display = [
         'email',
         'username',
-        'is_admin',
+        'is_supervisor',
     ]
-    fieldsets = UserAdmin.fieldsets + ((None, {'fields': ('is_admin',)}),)
-    add_fieldsets = UserAdmin.add_fieldsets + ((None, {'fields': ('is_admin',)}),)
+    fieldsets = UserAdmin.fieldsets + ((None, {'fields': ('is_supervisor',)}),)
+    add_fieldsets = UserAdmin.add_fieldsets + ((None, {'fields': ('is_supervisor',)}),)
  
 admin.site.register(Employee, EmployeeAdmin)

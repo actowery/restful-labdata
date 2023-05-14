@@ -11,7 +11,7 @@ class CustomUser(AbstractUser):
         verbose_name_plural = 'Custom Users'
 
 class Employee(AbstractUser):
-    is_admin = models.BooleanField(default=False)
+    is_supervisor = models.BooleanField(default=False)
     groups = models.ManyToManyField(Group, related_name='employees', blank=True)
     user_permissions = models.ManyToManyField(Permission, related_name='employees', blank=True)
 
