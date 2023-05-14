@@ -20,6 +20,7 @@ class SignupPageTests(TestCase):
             {
               "username": "testuser",
               "email": "testuser@email.com",
+              "payment_method": "check",
               "password1": "testpass123",
               "password2": "testpass123",
             },
@@ -29,3 +30,4 @@ class SignupPageTests(TestCase):
         self.assertEqual(get_user_model().objects.all()[0].username, "testuser")
         self.assertEqual(get_user_model().objects.all()[0].email,
         "testuser@email.com")
+        self.assertEqual(get_user_model().objects.all()[0].payment_method, "check")
