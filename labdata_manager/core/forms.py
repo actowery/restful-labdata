@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-
+from django.forms.models import BaseInlineFormSet
 from .models import Comment, Order, Assay, OrderAssay
 from common.constants import AVAILABLE_ASSAYS, STATUS_OPTIONS, RESTULT_OPTIONS
 
@@ -13,10 +13,16 @@ class OrderAssayForm(forms.ModelForm):
         quantity= forms.NumberInput()
 
 
+class OrderAssayFormSet(BaseInlineFormSet):
+    def clean(self):
+        # Override the clean method to remove duplicate assay data validation
+        pass
+
 OrderAssayFormSet = inlineformset_factory(
     Order,
     OrderAssay,
     form=OrderAssayForm,
+    formset=OrderAssayFormSet,
     extra=1,  # Number of additional forms to display
     can_delete=True,  # Allow deletion of existing forms
 )
