@@ -1,7 +1,27 @@
 from django import forms
+from django.forms import inlineformset_factory
 
-from .models.models import Comment, Order
-from common.constants import AVAILABLE_ASSAYS
+from .models import Comment, Order, Assay, OrderAssay
+from common.constants import AVAILABLE_ASSAYS, STATUS_OPTIONS, RESTULT_OPTIONS
+
+        
+class OrderAssayForm(forms.ModelForm):
+    class Meta:
+        model = OrderAssay
+        fields = ('assay', 'quantity')
+        assay= forms.Select(choices=AVAILABLE_ASSAYS)
+        quantity= forms.NumberInput()
+
+
+OrderAssayFormSet = inlineformset_factory(
+    Order,
+    OrderAssay,
+    form=OrderAssayForm,
+    extra=1,  # Number of additional forms to display
+    can_delete=True,  # Allow deletion of existing forms
+)
+
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
@@ -9,11 +29,26 @@ class CommentForm(forms.ModelForm):
 
 class OrderForm(forms.ModelForm):
 
+    orderassays = OrderAssayFormSet()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.orderassays = OrderAssayFormSet(instance=self.instance)
+        else:
+            self.orderassays = OrderAssayFormSet()
+    def save(self, *args, **kwargs):
+        instance = super().save(*args, **kwargs)
+        for form in self.orderassays:
+            orderassay = form.save(commit=False)
+            orderassay.order = instance
+            orderassay.save()
+        return instance
+
     class Meta:
         model = Order
-        fields = ("company", "assays", "quantity")
+        fields = ("company",)
         widgets = {
-                    "assays": forms.Select(choices=AVAILABLE_ASSAYS),
                     "company": forms.TextInput(),
-                    "quantity": forms.NumberInput(),
                 }
+

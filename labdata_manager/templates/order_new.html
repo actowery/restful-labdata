@@ -1,8 +1,43 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>New order</h1>
-<form action="" method="post">{% csrf_token %}
+<form id="order-form" method="post">{% csrf_token %}
     {{ form.as_p }}
+    <div id="assay-formset">
+        {{ form.orderassays.management_form }}
+        {% for formset_form in form.orderassays %}
+            {% for hidden_field in formset_form.hidden_fields %}
+                {{ hidden_field }}
+            {% endfor %}
+            {% for field in formset_form.visible_fields %}
+                {{ field.label_tag }} {{ field }}
+            {% endfor %}
+        {% endfor %}
+    </div>
+    <button type="button" id="add-assay-form">Add Assay</button>
+  
     <input type="submit" value="Save">
 </form>
+
+{% # Add the template for the empty formset form %}
+<script type="text/template" id="empty-form">
+    {% for hidden_field in formset.empty_form.hidden_fields %}
+        {{ hidden_field }}
+    {% endfor %}
+    {% for field in formset.empty_form.visible_fields %}
+        {{ field.label_tag }} {{ field }}
+    {% endfor %}
+</script>
 {% endblock content %}
+
+{% block script %}
+<script>
+    var formCount = {{ form.orderassays.total_form_count }};
+
+    $('#add-assay-form').click(function() {
+        var form = $('#empty-form').html().replace(/__prefix__/g, formCount);
+        $('#assay-formset').append(form);
+        formCount++;
+    });
+</script>
+{% endblock %}
