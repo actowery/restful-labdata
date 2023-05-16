@@ -17,7 +17,7 @@ class Order(models.Model):
         verbose_name_plural = "Orders"
 
     def __str__(self):
-        return str(self.pk)
+        return f"{self.company}-{str(self.pk)}"
 
     def get_absolute_url(self):
         return reverse("order_detail", kwargs={"pk": self.pk})
@@ -37,10 +37,13 @@ class Order(models.Model):
 
 
 class OrderAssay(models.Model):
+
+    def __str__(self):
+        return f"{self.assay}-{str(self.pk)}"
+
     class Meta:
         verbose_name = "Assay Batch"
         verbose_name_plural = "Assay Batches"
-        unique_together = ('order', 'assay')
 
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     id =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
