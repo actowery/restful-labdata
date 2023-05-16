@@ -1,18 +1,24 @@
 from django.contrib import admin
-from .models.models import Order
-from .models.assays import Assay
+from .models import Order, OrderAssay
+
+class OrderAssayInline(admin.TabularInline):
+    model = OrderAssay
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
         'created_at',
         'updated_at',
         'company',
-        'display_assays',
+        'display_order_assays',
+    ]
+    inlines = [
+        OrderAssayInline,
     ]
 
-    def display_assays(self, obj):
-        return ', '.join([assay.name for assay in obj.assays.all()])
- 
-    display_assays.short_description = 'Assays'
-admin.site.register(Order, OrderAdmin)
+    def display_order_assays(self, obj):
+        order_assays = OrderAssay.objects.filter(order=obj)
+        return ', '.join([order_assay.name for order_assay in order_assays])
 
+    display_order_assays.short_description = 'Order Assays'
+
+admin.site.register(Order, OrderAdmin)

@@ -3,3 +3,16 @@ AVAILABLE_ASSAYS= (
        ('ELISA', 'ELIZA'),
        ('Other','OTHER'),
        )
+
+STATUS_OPTIONS = [
+    ('P', 'Pending'),
+    ('R', 'Running'),
+    ('C', 'Complete'),
+]
+
+RESTULT_OPTIONS = [
+    ('P', 'Pass'),
+    ('F', 'Fail'),
+    ('I', 'Incomplete'),
+    ('E', 'Error'),
+]

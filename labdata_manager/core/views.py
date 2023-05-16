@@ -1,14 +1,20 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.forms import modelformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
 
-from .forms import CommentForm, OrderForm
+from .forms import CommentForm, OrderForm, OrderAssayForm
+from .models import Order, OrderAssay
 
-
-from .models.models import Order
+OrderAssayFormSet = modelformset_factory(
+    OrderAssay,
+    form=OrderAssayForm,
+    extra=1,  # Number of additional forms to display
+    can_delete=True,  # Allow deletion of existing forms
+)
 
 class HomeView(ListView):
     model = Order
@@ -41,8 +47,21 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
         order.user = self.request.user
         order.order = self.object
         order.save()
+
+        order_assays_formset = OrderForm.OrderAssayFormSet(self.request.POST, instance=order)
+        if order_assays_formset.is_valid():
+            order_assays_formset.save()
+
         return super().form_valid(form)
-    
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data['order_assay_formset'] = OrderAssayFormSet(self.request.POST)
+        else:
+            data['order_assay_formset'] = OrderAssayFormSet()
+        return data
+
     def form_invalid(self, form):
         # This method is called when the form validation fails.
         # You can add your debugging statements here to print the form errors.
