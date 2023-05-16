@@ -9,11 +9,9 @@ class OrderAssayForm(forms.ModelForm):
     class Meta:
         model = OrderAssay
         fields = ('assay', 'quantity')
-        assay= forms.Select(choices=AVAILABLE_ASSAYS)
-        quantity= forms.NumberInput()
 
 
-class OrderAssayFormSet(BaseInlineFormSet):
+class OAFormSet(BaseInlineFormSet):
     def clean(self):
         # Override the clean method to remove duplicate assay data validation
         pass
@@ -22,7 +20,7 @@ OrderAssayFormSet = inlineformset_factory(
     Order,
     OrderAssay,
     form=OrderAssayForm,
-    formset=OrderAssayFormSet,
+    formset=OAFormSet,
     extra=1,  # Number of additional forms to display
     can_delete=True,  # Allow deletion of existing forms
 )
@@ -35,7 +33,7 @@ class CommentForm(forms.ModelForm):
 
 class OrderForm(forms.ModelForm):
 
-    orderassays = OrderAssayFormSet()
+    orderassays = OrderAssayFormSet
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

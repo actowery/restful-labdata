@@ -6,15 +6,9 @@ from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
 
-from .forms import CommentForm, OrderForm, OrderAssayForm
+from .forms import CommentForm, OrderForm, OrderAssayForm, OrderAssayFormSet
 from .models import Order, OrderAssay
 
-OrderAssayFormSet = modelformset_factory(
-    OrderAssay,
-    form=OrderAssayForm,
-    extra=1,  # Number of additional forms to display
-    can_delete=True,  # Allow deletion of existing forms
-)
 
 class HomeView(ListView):
     model = Order
@@ -45,7 +39,6 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         order = form.save(commit=False)
         order.user = self.request.user
-        order.order = self.object
         order.save()
 
         order_assays_formset = OrderForm.OrderAssayFormSet(self.request.POST, instance=order)
