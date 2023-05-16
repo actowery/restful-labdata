@@ -16,8 +16,12 @@ class Order(models.Model):
         verbose_name = "Order"
         verbose_name_plural = "Orders"
 
+    # e.g. company1-20230516-2
+    def order_number(self):
+        return f"{self.company}-{self.created_at.strftime('%Y%m%d')}-{str(self.pk)}"
+
     def __str__(self):
-        return f"{self.company}-{str(self.pk)}"
+        return self.order_number()
 
     def get_absolute_url(self):
         return reverse("order_detail", kwargs={"pk": self.pk})

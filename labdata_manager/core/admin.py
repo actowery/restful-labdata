@@ -18,9 +18,7 @@ class OrderAdmin(admin.ModelAdmin):
     ]
 
     def order_number(self, obj):
-        return str(obj)
-
-
+        return obj.order_number()
 
     def get_formsets(self, request, obj=None):
         # Use the custom formset for OrderAssay
